@@ -1,0 +1,11 @@
+﻿@{
+    var path = Context.Request.Path;
+
+    if (path == "/Identity/Account/Login")
+    {
+        Layout = "/Views/Shared/_Login.cshtml";
+    } else
+    {
+        Layout = "/Views/Shared/_Layout.cshtml";
+    }
+}
