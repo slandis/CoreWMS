@@ -18,9 +18,6 @@ namespace CoreWMS.Controllers
         public override void OnActionExecuting(ActionExecutingContext filterContext)
         {
             ViewBag.ControllerName = "Configuration";
-
-            ViewBag.SubNavItems = new List<string>();
-            ViewBag.SubNavItems.Add("Warehouse");
         }
     }
 }

@@ -11,7 +11,6 @@
 using System;
 using System.Reflection;
 
-[assembly: Microsoft.AspNetCore.Identity.UI.UIFrameworkAttribute("Bootstrap5")]
 [assembly: Microsoft.Extensions.Configuration.UserSecrets.UserSecretsIdAttribute("aspnet-CoreWMS-c41aa911-b5e4-46e5-8cc3-ba3fb689e322")]
 [assembly: System.Reflection.AssemblyCompanyAttribute("CoreWMS")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]

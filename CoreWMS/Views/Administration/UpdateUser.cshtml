@@ -1,0 +1,58 @@
+﻿@using CoreWMS.Data
+
+@model UserEdit
+
+<h1 class="bg-purple text-white">Update Role</h1>
+<a asp-controller="@ViewBag.ControllerName" asp-action="Users" class="btn btn-secondary">Back</a>
+<div asp-validation-summary="All" class="text-danger"></div>
+
+<form method="post">
+    <input type="hidden" name="userName" value="@Model.User.UserName" />
+    <input type="hidden" name="userId" value="@Model.User.Id" />
+    
+    <h2 class="bg-purple p-1 text-white">@Model.User.UserName</h2>
+    <input class="form-control" type="text" name="Email" value="@Model.User.Email" />
+    <input class="form-control" type="text" name="FirstName" value="@Model.User.FirstName" />
+    <input class="form-control" type="text" name="LastName" value="@Model.User.LastName" />
+
+    <h2 class="bg-info p-1 text-white">Add to @Model.User.UserName</h2>
+    <table class="table table-bordered table-sm">
+        @if (Model.NonMembers.Count() == 0)
+        {
+            <tr><td colspan="2">Member of all roles</td></tr>
+        }
+        else
+        {
+            @foreach (ApplicationRole role in Model.NonMembers)
+            {
+                <tr>
+                    <td>@role.Name</td>
+                    <td>
+                        <input type="checkbox" name="AddIds" value="@role.Id">
+                    </td>
+                </tr>
+            }
+        }
+    </table>
+
+    <h2 class="bg-info p-1 text-white">Remove From @Model.User.UserName</h2>
+    <table class="table table-bordered table-sm">
+        @if (Model.Members.Count() == 0)
+        {
+            <tr><td colspan="2">Member of no roles</td></tr>
+        }
+        else
+        {
+            @foreach (ApplicationRole role in Model.Members)
+            {
+                <tr>
+                    <td>@role.Name</td>
+                    <td>
+                        <input type="checkbox" name="DeleteIds" value="@role.Id">
+                    </td>
+                </tr>
+            }
+        }
+    </table>
+    <button type="submit" class="btn btn-primary">Save</button>
+</form>

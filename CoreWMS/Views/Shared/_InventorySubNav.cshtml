@@ -1,0 +1,13 @@
+﻿@using Microsoft.AspNetCore.Identity
+@using CoreWMS.Data
+
+@inject SignInManager<ApplicationUser> SignInManager
+@inject UserManager<ApplicationUser> UserManager
+
+@if (User.IsInRole("CORE_INVENTORY"))
+{
+    <a class="nav-link" asp-controller="@ViewBag.ControllerName" asp-action="Inventory">Inventory</a>
+    <a class="nav-link" asp-controller="@ViewBag.ControllerName" asp-action="Locations">Locations</a>
+    <a class="nav-link" asp-controller="@ViewBag.ControllerName" asp-action="Items">Items</a>
+    <a class="nav-link" asp-controller="@ViewBag.ControllerName" asp-action="Footprints">Footprints</a>
+}

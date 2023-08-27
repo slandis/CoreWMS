@@ -24,19 +24,19 @@ namespace CoreWMS.Controllers
                 ModelState.AddModelError("", error.Description);
         }
 
-        [Authorize(Roles = "Admin")]
+        [Authorize(Roles = "CORE_ADMIN")]
         public IActionResult Index()
         {
             return View();
         }
 
-        [Authorize(Roles = "Admin")]
+        [Authorize(Roles = "CORE_ADMIN")]
         public IActionResult Roles()
         {
             return View();
         }
 
-        [Authorize(Roles = "Admin")]
+        [Authorize(Roles = "CORE_ADMIN")]
         public IActionResult CreateRole() => View();
 
         [HttpPost]
@@ -53,6 +53,7 @@ namespace CoreWMS.Controllers
             return View(name);
         }
 
+        [Authorize(Roles = "CORE_ADMIN")]
         [HttpPost]
         public async Task<IActionResult> DeleteRole(string id)
         {
@@ -70,6 +71,7 @@ namespace CoreWMS.Controllers
             return View("Index", roleManager.Roles);
         }
 
+        [Authorize(Roles = "Adminm, CORE_ADMIN")]
         public async Task<IActionResult> UpdateRole(string id)
         {
             ApplicationRole role = await roleManager.FindByIdAsync(id);
@@ -90,6 +92,7 @@ namespace CoreWMS.Controllers
             }); ;
         }
 
+        [Authorize(Roles = "CORE_ADMIN")]
         [HttpPost]
         public async Task<IActionResult> UpdateRole(RoleModification model)
         {
@@ -134,13 +137,85 @@ namespace CoreWMS.Controllers
                 return await UpdateRole(model.RoleId);
         }
 
+        [Authorize(Roles = "CORE_ADMIN")]
+        public IActionResult Users()
+        {
+            return View();
+        }
+
+        public async Task<IActionResult> UpdateUser(string id)
+        {
+            ApplicationUser user = await userManager.FindByIdAsync(id);
+
+            List<ApplicationRole> members = new List<ApplicationRole>();
+            List<ApplicationRole> nonMembers = new List<ApplicationRole>();
+
+            foreach (ApplicationRole role in roleManager.Roles)
+            {
+                var list = await userManager.IsInRoleAsync(user, role.Name) ? members : nonMembers;
+                list.Add(role);
+            }
+
+            return View(new UserEdit
+            {
+                User = user,
+                Members = members,
+                NonMembers = nonMembers
+            }); ;
+        }
+
+        [Authorize(Roles = "CORE_ADMIN")]
+        [HttpPost]
+        public async Task<IActionResult> UpdateUser(UserModification model)
+        {
+            IdentityResult result;
+            if (ModelState.IsValid)
+            {
+                ApplicationUser user = await userManager.FindByIdAsync(model.UserId);
+                if (user != null)
+                {
+                    foreach (string roleId in model.AddIds ?? new string[] { })
+                    {
+                        ApplicationRole role = await roleManager.FindByIdAsync(roleId);
+
+                        if (role != null)
+                        {
+                            result = await userManager.AddToRoleAsync(user, role.Name);
+
+                            if (!result.Succeeded)
+                                Errors(result);
+                        }
+                    }
+
+                    foreach (string roleId in model.DeleteIds ?? new string[] { })
+                    {
+                        ApplicationRole role = await roleManager.FindByIdAsync(roleId);
+
+                        if (role != null)
+                        {
+                            result = await userManager.RemoveFromRoleAsync(user, role.Name);
+                            if (!result.Succeeded)
+                                Errors(result);
+                        }
+                    }
+
+                    user.Email = model.Email;
+                    user.FirstName = model.FirstName;
+                    user.LastName = model.LastName;
+
+                    await userManager.UpdateAsync(user);
+                }
+            }
+
+            if (ModelState.IsValid)
+                return RedirectToAction(nameof(Users));
+            else
+                return await UpdateUser(model.UserId);
+        }
+
         public override void OnActionExecuting(ActionExecutingContext filterContext)
         {
             ViewBag.ControllerName = "Administration";
-            ViewBag.SubNavItems = new List<string>();
-
-            ViewBag.SubNavItems.Add("Roles");
-            ViewBag.SubNavItems.Add("Users");
         }
     }
 }

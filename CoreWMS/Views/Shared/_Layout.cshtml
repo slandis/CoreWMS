@@ -1,5 +1,5 @@
 ﻿@{
-    var subNavItems = ViewBag.SubNavItems;
+    var partialName = "_" + ViewBag.ControllerName + "SubNav.cshtml";
 }
 
 <!doctype html>
@@ -114,9 +114,7 @@
 <div class="nav-scroller bg-body shadow-sm">
   <nav class="nav" aria-label="Secondary navigation">
     <partial name="_SubMenuPartial" />
-    @foreach (string subItem in subNavItems) {
-    <a class="nav-link" asp-controller="@ViewBag.ControllerName" asp-action="@subItem">@subItem</a>
-    }
+    <partial name="@partialName" />
   </nav>
 </div>
 

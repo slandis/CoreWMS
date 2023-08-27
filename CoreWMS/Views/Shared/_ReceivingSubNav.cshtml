@@ -1,0 +1,11 @@
+﻿@using Microsoft.AspNetCore.Identity
+@using CoreWMS.Data
+
+@inject SignInManager<ApplicationUser> SignInManager
+@inject UserManager<ApplicationUser> UserManager
+
+@if (User.IsInRole("CORE_RECEIVING"))
+{
+    <a class="nav-link" asp-controller="@ViewBag.ControllerName" asp-action="Orders">Orders</a><span class="nav-link text-dark">|</span>
+    <a class="nav-link" asp-controller="@ViewBag.ControllerName" asp-action="Equipment">Equipment</a>
+}

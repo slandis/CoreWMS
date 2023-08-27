@@ -1,0 +1,52 @@
+﻿@using CoreWMS.Data
+
+@model IEnumerable<ApplicationUser>
+@inject UserManager<ApplicationUser> UserManager
+
+@{
+    ViewData["Title"] = "USERS";
+
+    var getUsers = UserManager.Users.ToList<ApplicationUser>();
+    ViewBag.Users = getUsers.OrderBy(x => x.UserName);
+}
+
+<br />
+<h1 class="bg-med-purple text-white">All Users</h1>
+<a asp-action="CreateRole" class="btn btn-secondary">Create User</a>
+
+<div class="table-responsive small">
+    <table class="table table-striped table-sm">
+        <thead>
+            <tr>
+                <th scope="col"></th>
+                <th scope="col">Username</th>
+                <th scope="col">First Name</th>
+                <th scope="col">Last Name</th>
+                <th scope="col">Email</th>
+                <th scope="col">Roles</th>
+                <th scope="col">Update</th>
+                <th scope="col">Delete</th>
+            </tr>
+        </thead>
+        <tbody>
+    @foreach (var user in ViewBag.Users)
+    {
+        <tr>
+            <td><input type="checkbox" id="modifyUser" name="modify" value="@user.Id"></td>
+            <td>@user.UserName</td>
+            <td>@user.FirstName</td>
+            <td>@user.LastName</td>
+            <td>@user.Email</td>
+            <td i-user="@user.Id"></td>
+            <td><a class="btn btn-sm btn-primary" asp-action="UpdateUser" asp-route-id="@user.Id">Update</a></td>
+            <td>
+                <form asp-action="DeletUser" asp-route-id="@user.Id" method="post">
+                    <button type="submit" class="btn btn-sm btn-danger">
+                        Delete
+                    </button>
+                </form>
+            </td>
+        </tr>
+    }
+    </table>
+</div>

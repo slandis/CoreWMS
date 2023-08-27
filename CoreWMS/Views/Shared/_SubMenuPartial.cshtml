@@ -4,14 +4,30 @@
 @inject SignInManager<ApplicationUser> SignInManager
 @inject UserManager<ApplicationUser> UserManager
 
+@{
+    var roles = User.GetRoles();
+
+    //var userClaims = User.Identity as System.Security.Claims.ClaimsIdentity;
+    //var roles = userClaims.FindAll("http://schemas.microsoft.com/ws/2008/06/identity/claims/role").ToList();
+}
 
 <div class="dropdown">
     <button class="btn dropdown-toggle" type="button" id="dropdownMenuButton1" data-bs-popper-config='{"strategy":"fixed"}' data-bs-toggle="dropdown" aria-expanded="false">
         Dropdown
     </button>
     <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
-        <li><a class="dropdown-item" href="#">Action</a></li>
-        <li><a class="dropdown-item" href="#">Another action</a></li>
-        <li><a class="dropdown-item" href="#">Something else here</a></li>
+        @if (User.IsInRole("CORE_USER"))
+        {
+            <li><a class="dropdown-item" asp-controller="Configuration" asp-action="Index">Configuration</a></li>
+            <li><a class="dropdown-item" asp-controller="Planning" asp-action="Index">Planning</a></li>
+            <li><a class="dropdown-item" asp-controller="Receiving" asp-action="Index">Receiving</a></li>
+            <li><a class="dropdown-item" asp-controller="Shipping" asp-action="Index">Shipping</a></li>
+        }
+
+        @if (User.IsInRole("CORE_ADMIN"))
+        {
+            <li><a class="dropdown-item" asp-controller="Administration" asp-action="Index">Administration</a></li>
+        }
+
     </ul>
 </div>

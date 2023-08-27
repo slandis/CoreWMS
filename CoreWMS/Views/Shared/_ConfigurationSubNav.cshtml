@@ -1,0 +1,10 @@
+﻿@using Microsoft.AspNetCore.Identity
+@using CoreWMS.Data
+
+@inject SignInManager<ApplicationUser> SignInManager
+@inject UserManager<ApplicationUser> UserManager
+
+@if (User.IsInRole("CORE_ADMIN"))
+{
+    <a class="nav-link" asp-controller="@ViewBag.ControllerName" asp-action="Warehouse">Warehouse</a>
+}
