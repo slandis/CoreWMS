@@ -1,2 +1,4 @@
 CoreWMS/bin
 /CoreWMS/appsettings.json
+/CoreWMS/appsettings.Development.json
+/CoreWMS/appsettings.json
